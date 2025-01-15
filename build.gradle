@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.0'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.github.davidmc24.gradle.plugin.avro' version '1.9.1'
 }
 
 group = 'co.istad'
@@ -19,12 +20,48 @@ configurations {
     }
 }
 
+// Configure source sets to include Avro schema files
+sourceSets {
+    main {
+        resources {
+            srcDirs += ['src/main/avro']  // Add avro directory to resources
+        }
+    }
+}
+
+// Configure Avro plugin
+avro {
+    fieldVisibility = "PRIVATE"
+    createSetters = true
+    createOptionalGetters = false
+    gettersReturnOptional = false
+    optionalGettersForNullableFieldsOnly = false
+    templateDirectory = null
+    stringType = "String"
+    enableDecimalLogicalType = true
+}
+
 repositories {
     mavenCentral()
+    maven {
+        url "https://packages.confluent.io/maven/"
+    }
 }
 
 dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.postgresql:postgresql'
+
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.webjars:sockjs-client:1.5.1'
+    implementation 'org.webjars:stomp-websocket:2.3.4'
+
+    // Add the connect model dependency
+    implementation 'io.confluent:kafka-avro-serializer:7.5.1'
+    implementation 'org.apache.avro:avro:1.11.4'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.kafka:spring-kafka'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -35,4 +72,9 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Make sure generateAvroJava runs before compilation
+tasks.named('compileJava').configure {
+    source += tasks.named('generateAvroJava')
 }

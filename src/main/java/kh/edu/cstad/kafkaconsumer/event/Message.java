@@ -1,4 +1,4 @@
-package co.istad.kafkaconsumer.event;
+package kh.edu.cstad.kafkaconsumer.event;
 
 public record Message(
         String id,

@@ -1,4 +1,4 @@
-package co.istad.kafkaconsumer;
+package kh.edu.cstad.kafkaconsumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

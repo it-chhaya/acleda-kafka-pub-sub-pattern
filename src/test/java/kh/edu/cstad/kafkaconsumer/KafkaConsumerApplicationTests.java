@@ -1,4 +1,4 @@
-package co.istad.kafkaconsumer;
+package kh.edu.cstad.kafkaconsumer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

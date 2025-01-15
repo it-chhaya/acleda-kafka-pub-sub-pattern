@@ -1,0 +1,40 @@
+server:
+  port: 1010
+
+spring:
+  application:
+    name: kafka-consumer
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://202.178.125.77:5168/employees?search_path=employees
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  kafka:
+    bootstrap-servers: "202.178.125.77:29093,202.178.125.77:39093,202.178.125.77:49093"
+    #bootstrap-servers: "localhost:29093,localhost:39093,localhost:49093"
+    streams:
+      properties:
+        schema.registry.url: http://202.178.125.77:8081
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+        commit.interval.ms: 5000
+        state.dir: /tmp/kafka-streams
+    consumer:
+      group-id: ${spring.application.name}
+      auto-offset-reset: earliest
+    properties:
+      specific.avro.reader: false
+      auto.register.schemas: true
+      schema.registry.url: http://202.178.125.77:8081
+    security:
+      protocol: SSL
+    ssl:
+      trust-store-location: classpath:kafka.server.truststore.jks
+      trust-store-password: password123
+      key-store-location: classpath:kafka.server.keystore.jks
+      key-store-password: password123
+      key-password: password123
