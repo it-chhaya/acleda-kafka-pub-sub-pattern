@@ -16,11 +16,6 @@ public class ProcessController {
 
     private final ProcessService processService;
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
     @PostMapping("/start-process")
     @ResponseBody
     public ResponseEntity<Process> startProcess(@RequestBody String data) {
